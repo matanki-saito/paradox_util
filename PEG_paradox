@@ -35,17 +35,21 @@ value
   / true
   / object
   / number
+  / ID
   / no
+  / norse
   / yes
   / string
   / array
-  / ID
 
 false = "false" { return false; }
 null  = "null"  { return null;  }
 true  = "true"  { return true;  }
 
 // ----- 4. Objects -----
+
+norse
+ = "norse"
 
 object
   = begin_object
@@ -120,7 +124,7 @@ zero
   = "0"
   
 ID
-  = text:[A-zö0-9_]+ { return text.join(""); }
+  = text:[\-A-zÀ-ÿœšŸŠŒŽž’'0-9_]+ { return text.join(""); }
 
 comment
   = "#" [^\n]* "\n"
@@ -131,7 +135,7 @@ string "string"
   = quotation_mark chars:char* quotation_mark { return chars.join(""); }
 
 key
- = k:[A-zö0-9_]* { return k.join(""); }
+ = k:[\-A-zÀ-ÿœšŸŠŒŽž’'0-9_]* { return k.join(""); }
 
 char
   = unescaped
