@@ -34,10 +34,9 @@ value
   / null
   / true
   / object
-  / number
   / ID
+  / number
   / no
-  / norse
   / yes
   / string
   / array
@@ -47,9 +46,6 @@ null  = "null"  { return null;  }
 true  = "true"  { return true;  }
 
 // ----- 4. Objects -----
-
-norse
- = "norse"
 
 object
   = begin_object
