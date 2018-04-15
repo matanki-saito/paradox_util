@@ -124,7 +124,7 @@ zero
   = "0"
   
 ID
-  = text:[\-A-zÀ-ÿœšŸŠŒŽž’'0-9_]+ { return text.join(""); }
+  = text:[\.\-A-zÀ-ÿœšŸŠŒŽž’'0-9_]+ { return text.join(""); }
 
 comment
   = "#" [^\n]* "\n"
@@ -135,7 +135,7 @@ string "string"
   = quotation_mark chars:char* quotation_mark { return chars.join(""); }
 
 key
- = k:[\-A-zÀ-ÿœšŸŠŒŽž’'0-9_]* { return k.join(""); }
+ = k:[\.\-A-zÀ-ÿœšŸŠŒŽž’'0-9_]* { return k.join(""); }
 
 char
   = unescaped
