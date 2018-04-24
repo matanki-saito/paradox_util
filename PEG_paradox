@@ -22,7 +22,11 @@ begin_array     = ws "{" ws
 begin_object    = ws "{" ws
 end_array       = ws "}" ws
 end_object      = ws "}" ws
-name_separator  = ws "=" ws
+name_separator  = ws "=" ws/
+				  ws "<" ws/
+                  ws ">" ws
+                  ws ">=" ws
+                  ws "<=" ws
 value_separator = ws "" ws
 
 ws "whitespace" = ([ \t\n\r] / comment)* 
@@ -56,7 +60,7 @@ object
         var result = [];
 
         [head].concat(tail).forEach(function(element) {
-          result.push([element[0],element[1]]);
+          result.push([element[0],element[1],element[2]]);
         });
 
         return result;
@@ -66,8 +70,8 @@ object
     { return members !== null ? members: {}; }
 
 member
-  = key:key name_separator value:value {
-      return [ key, value ];
+  = key:key sep:name_separator val:value {
+      return [key,val,sep[1]];
     }
 
 // ----- 5. Arrays -----
