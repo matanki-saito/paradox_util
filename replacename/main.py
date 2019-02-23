@@ -154,7 +154,7 @@ class Target(object):
 
 
 if __name__ == '__main__':
-    paratranz_folder_name = "2019_02_22_23_03_06"
+    paratranz_folder_name = "2019_02_23_17_36_07"
 
     target_list = [
         Target(ignore_list="TBD",
@@ -174,6 +174,12 @@ if __name__ == '__main__':
                map=gen_map(
                    target_dir_path=os.path.join(paratranz_folder_name, "raw\\history\\countries"),
                    match_key_pattern=r"leader\|name"
+               )),
+        Target(ignore_list="TBD",
+               match_pattern=r'(dynasty\s*=\s*")([^"]+)(")',
+               map=gen_map(
+                   target_dir_path=os.path.join(paratranz_folder_name, "raw\\history\\countries"),
+                   match_key_pattern=r"monarch\|dynasty"
                ))
     ]
 
