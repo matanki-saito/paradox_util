@@ -100,7 +100,7 @@ def u_write(file_path, text):
     if not os.path.exists(dir_path):
         os.makedirs(dir_path)
 
-    with open(file_path + ".utf8", 'w', encoding='utf-8') as f:
+    with open(file_path + ".utf8toCP1252", 'w', encoding='utf-8') as f:
         f.write(text)
 
 
@@ -130,7 +130,7 @@ def scan_files(src_path="C:\\Program Files (x86)\\Steam\steamapps\\common\\Europ
         with open(str(file_path), 'r', encoding='windows-1252', errors='ignore') as f:
             src_text = dst_text = f.read()
             for target in target_list:
-                dst_text = replace_text(src_text=src_text,
+                dst_text = replace_text(src_text=dst_text,
                                         match_pattern=target.match_pattern,
                                         translation_map=target.map)
 
