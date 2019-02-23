@@ -100,13 +100,7 @@ def u_write(file_path, text):
     if not os.path.exists(dir_path):
         os.makedirs(dir_path)
 
-    # 拡張子を変更する
-    pair = os.path.splitext(file_path)
-
-    # dir
-    new_file_path = os.path.join(pair[0], pair[0] + ".utf8")
-
-    with open(new_file_path, 'w', encoding='utf-8') as f:
+    with open(file_path + ".utf8", 'w', encoding='utf-8') as f:
         f.write(text)
 
 
