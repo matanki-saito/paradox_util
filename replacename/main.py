@@ -82,9 +82,10 @@ def replace_text(src_text,
             if len(lis) > 1:
                 print("複数候補あり、[0]で代用します {}".format(lis))
             text = lis[0]
+
         return x.group(1) + text + x.group(3)
 
-    return re.subn(match_pattern, repl, src_text)
+    return re.sub(match_pattern, repl, src_text)
 
 
 def u_write(file_path, text):
@@ -109,11 +110,9 @@ def u_write(file_path, text):
         f.write(text)
 
 
-historical_countries_monarch_names_map = {}
-
-
 def scan_files(src_path="C:\\Program Files (x86)\\Steam\steamapps\\common\\Europa Universalis IV\\",
-               dst_path=os.getcwd()):
+               dst_path=os.getcwd(),
+               target_list=[]):
     """
     デフォルトはEU4のインストールディレクトリを走査して、
     pythonが実行されているカレントディレクトリにdstフォルダを作って
@@ -135,36 +134,47 @@ def scan_files(src_path="C:\\Program Files (x86)\\Steam\steamapps\\common\\Europ
         # events/Tenguri.txtなどはコメントにUTF-8で書き込んでいるようで、テキストにCP1252には存在しない
         # 0x81などが発生してしまうのでignoreしている
         with open(str(file_path), 'r', encoding='windows-1252', errors='ignore') as f:
-            try:
-                src_text = f.read()
-            except:
-                print(f)
-                raise Exception()
-
-            dst_text_t = replace_text(src_text=src_text,
-                                      match_pattern=r'(has_ruler\s*=\s*")([^"]+)(")',
-                                      translation_map=historical_countries_monarch_names_map)
+            src_text = dst_text = f.read()
+            for target in target_list:
+                dst_text = replace_text(src_text=src_text,
+                                        match_pattern=target.match_pattern,
+                                        translation_map=target.map)
 
             # 変更があったもののみを保存
-            if dst_text_t[1] > 0:
+            if dst_text != src_text:
                 u_write(os.path.join(dst_path, "dst", str(file_path).replace(src_path, "")),
-                        dst_text_t[0])
+                        dst_text)
+
+
+class Target(object):
+    def __init__(self, ignore_list, match_pattern, map):
+        self.ignore_list = ignore_list
+        self.match_pattern = match_pattern
+        self.map = map
 
 
 if __name__ == '__main__':
-    countries_monarch_names_map = gen_map(
-        target_dir_path="2019_02_22_23_03_06\\raw\\common\\countries",
-        match_key_pattern=r"monarch_names"
-    )
+    paratranz_folder_name = "2019_02_22_23_03_06"
 
-    historical_countries_monarch_names_map = gen_map(
-        target_dir_path="2019_02_22_23_03_06\\raw\\history\\countries",
-        match_key_pattern=r"monarch\|name"
-    )
+    target_list = [
+        Target(ignore_list="TBD",
+               match_pattern=r'(has_ruler\s*=\s*")([^"]+)(")',
+               map=gen_map(
+                   target_dir_path=os.path.join(paratranz_folder_name, "raw\\history\\countries"),
+                   match_key_pattern=r"monarch\|name"
+               )),
+        Target(ignore_list="TBD",
+               match_pattern=r'(has_heir\s*=\s*")([^"]+)(")',
+               map=gen_map(
+                   target_dir_path=os.path.join(paratranz_folder_name, "raw\\history\\countries"),
+                   match_key_pattern=r"heir\|name"
+               )),
+        Target(ignore_list="TBD",
+               match_pattern=r'(has_leader\s*=\s*")([^"]+)(")',
+               map=gen_map(
+                   target_dir_path=os.path.join(paratranz_folder_name, "raw\\history\\countries"),
+                   match_key_pattern=r"leader\|name"
+               ))
+    ]
 
-    # デバッグ用。重複表示
-    # for key, item in historical_countries_monarch_names_map.items():
-    #    if len(item) > 1:
-    #        print("{} {}".format(key, item))
-
-    scan_files()
+    scan_files(target_list=target_list)
