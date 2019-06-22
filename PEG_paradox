@@ -34,16 +34,8 @@ ws "whitespace" = ([ \t\n\r] / comment)*
 // ----- 3. Values -----
 
 value
-  = false
-  / null
-  / true
-  / object
-  / ID
-  / number
-  / no
-  / yes
-  / string
-  / array
+  = object
+  / member
 
 false = "false" { return false; }
 null  = "null"  { return null;  }
@@ -60,7 +52,7 @@ object
         var result = [];
 
         [head].concat(tail).forEach(function(element) {
-          result.push([element[0],element[1],element[2]]);
+          result.push({key:element.key,value:element.value,ope:element.ope});
         });
 
         return result;
@@ -71,8 +63,11 @@ object
 
 member
   = key:key sep:name_separator val:value {
-      return [key,val,sep[1]];
+      return {key:key,value:val,ope:sep[1]};
     }
+  / other:primitive {
+  	return {key:'masuda',value:other, ope:'none'};
+  }
 
 // ----- 5. Arrays -----
 array
@@ -160,6 +155,16 @@ escape
 
 quotation_mark
   = '"'
+
+primitive
+  = false
+  / null
+  / true
+  / ID
+  / number
+  / no
+  / yes
+  / string
 
 unescaped
   = [^\0-\x1F\x22\x5C]
