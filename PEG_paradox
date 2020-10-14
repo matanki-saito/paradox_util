@@ -5,8 +5,8 @@ begin_object    = ws "{" ws
 end_object      = ws "}" ws
 name_separator  = ws "=" ws/
 				  ws "<" ws/
-                  ws ">" ws
-                  ws ">=" ws
+                  ws ">" ws /
+                  ws ">=" ws /
                   ws "<=" ws
 value_separator = ws "" ws
 
@@ -95,7 +95,7 @@ zero
   = "0"
   
 ID
-  = text:[@\.\-A-zÀ-ÿœšŸŠŒŽž’'0-9_]+ { return text.join(""); }
+  = text:[:@\.\-A-zÀ-ÿœšŸŠŒŽž’'0-9_]+ { return text.join(""); }
 
 comment
   = "#" [^\n]* "\n"
@@ -104,7 +104,7 @@ comment
 
 string "string"
   = quotation_mark chars:char* quotation_mark { return chars.join(""); }
-
+ 
 key
  = k:[@\.\-A-zÀ-ÿœšŸŠŒŽž’'0-9_]* { return k.join(""); }
 
@@ -126,6 +126,8 @@ char
     )
     { return sequence; }
 
+path = chars:char+  { return chars.join(""); }
+
 escape
   = "\\"
 
@@ -133,7 +135,8 @@ quotation_mark
   = '"'
 
 primitive
-  = false
+  =
+  false
   / null
   / true
   / ID
