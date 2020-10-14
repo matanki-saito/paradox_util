@@ -1,5 +1,5 @@
 JSON_text
-  = ws mem:member* ws { return mem; }
+  = mem:member* { return mem; }
 
 begin_object    = ws "{" ws
 end_object      = ws "}" ws
@@ -43,15 +43,18 @@ object
     { return members !== null ? members: {}; }
 
 member
-  = key:key sep:name_separator val:value {
+  =
+  key:key sep:name_separator val:value ws {
       return {key:key,value:val,ope:sep[1]};
     }
-  / keyOnly:primitive {
-  	return {key:keyOnly,value:null, ope: null};
-  }
-  / val:object {
+
+  / val:object ws {
   	return {key:'anonymous', value:val, ope: null }
   }
+  
+  / keyOnly:primitive ws {
+  	return {key:keyOnly,value:null, ope: null};
+  } 
 
 // ----- 6. Numbers -----
 
@@ -92,7 +95,7 @@ zero
   = "0"
   
 ID
-  = text:[\.\-A-zÀ-ÿœšŸŠŒŽž’'0-9_]+ { return text.join(""); }
+  = text:[@\.\-A-zÀ-ÿœšŸŠŒŽž’'0-9_]+ { return text.join(""); }
 
 comment
   = "#" [^\n]* "\n"
@@ -103,7 +106,7 @@ string "string"
   = quotation_mark chars:char* quotation_mark { return chars.join(""); }
 
 key
- = k:[\.\-A-zÀ-ÿœšŸŠŒŽž’'0-9_]* { return k.join(""); }
+ = k:[@\.\-A-zÀ-ÿœšŸŠŒŽž’'0-9_]* { return k.join(""); }
 
 char
   = unescaped
