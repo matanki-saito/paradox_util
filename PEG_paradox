@@ -1,5 +1,5 @@
 JSON_text
-  = mem:member* { return mem; }
+  = ws mem:member* ws { return mem; }
 
 begin_object    = ws "{" ws
 end_object      = ws "}" ws
