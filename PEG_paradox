@@ -1,26 +1,7 @@
-// JSON Grammar
-// ============
-//
-// Based on the grammar from RFC 7159 [1].
-//
-// Note that JSON is also specified in ECMA-262 [2], ECMA-404 [3], and on the
-// JSON website [4] (somewhat informally). The RFC seems the most authoritative
-// source, which is confirmed e.g. by [5].
-//
-// [1] http://tools.ietf.org/html/rfc7159
-// [2] http://www.ecma-international.org/publications/standards/Ecma-262.htm
-// [3] http://www.ecma-international.org/publications/standards/Ecma-404.htm
-// [4] http://json.org/
-// [5] https://www.tbray.org/ongoing/When/201x/2014/03/05/RFC7159-JSON
-
-// ----- 2. JSON Grammar -----
-
 JSON_text
   = ws mem:member* ws { return mem; }
 
-begin_array     = ws "{" ws
 begin_object    = ws "{" ws
-end_array       = ws "}" ws
 end_object      = ws "}" ws
 name_separator  = ws "=" ws/
 				  ws "<" ws/
@@ -65,20 +46,12 @@ member
   = key:key sep:name_separator val:value {
       return {key:key,value:val,ope:sep[1]};
     }
-  / other:primitive {
-  	return {key:'masuda',value:other, ope:'none'};
+  / keyOnly:primitive {
+  	return {key:keyOnly,value:null, ope: null};
   }
-
-// ----- 5. Arrays -----
-array
-  = begin_array
-    values:(
-      head:value
-      tail:(value_separator v:value { return v; })*
-      { return [head].concat(tail); }
-    )?
-    end_array
-    { return values !== null ? values : []; }
+  / val:object {
+  	return {key:'anonymous', value:val, ope: null }
+  }
 
 // ----- 6. Numbers -----
 
