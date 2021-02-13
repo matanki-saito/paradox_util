@@ -1,17 +1,24 @@
 grammar Expr;
 
 // lexer
+COMMENT: '#' ~('\n'|'\r')* ('\r\n' | '\r' | '\n' | EOF) -> skip;
 
 // "ABC" "" "\n" "ABC\nCBA" "猫と犬"
 WRAP_STRING: '"' CHAR* '"';
 
 // space is ignored
-SPACE: ' ' -> skip;
+SPACE: (' '|'\t') -> skip;
 
 // 5.00, 120, -1, 1e-5, 2e+500,
 NUMBER: '-'? INT FRAC? EXP?;
 
 DATE_TIME : INT DOT INT DOT INT;
+
+FALSE: 'false';
+TRUE: 'true';
+NULL : 'null';
+YES : 'yes';
+NO : 'no';
 
 KEY_LEVEL_STRING:
   ( DOT
@@ -36,11 +43,7 @@ LT: '<';
 GT: '>';
 LTE: '<=';
 GTE: '>=';
-FALSE: 'false';
-TRUE: 'true';
-NULL : 'null';
-YES : 'yes';
-NO : 'no';
+
 Semicolon: ':';
 Apostrophe: '’';
 SINGLE_QUOTE: '\'';
@@ -51,9 +54,6 @@ AT_MARK: '@';
 ALPHABETS: [a-zA-Z];
 EUROPEAN_LANG_CHARS: [À-ÿœšŸŠŒŽž];
 
-COMMENT : '#' [^\n]* '\n';
-
-
 CHAR: ~[\u{22}\u{5C}\u{0}-\u{1F}]
     | '\\' [bfnrt];
 EXP: [eE] ('-'|'+')? [0-9]+;
@@ -61,7 +61,6 @@ FRAC: DOT [0-9]+;
 INT: '0' | ([1-9] [0-9]*);
 
 // parser
-
 primitive: FALSE
          | TRUE
          | NULL
@@ -95,5 +94,6 @@ member: key name_separator value
       | object
       | primitive;
 
-object: BRACHET_START (member)? BRACHET_END;
+object: BRACHET_START (member)* BRACHET_END;
 
+comment: COMMENT;
