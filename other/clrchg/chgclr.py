@@ -43,7 +43,7 @@ target = [
 # https://seesaawiki.jp/samplepython/d/PIL%A4%C7%A4%CE%A5%D4%A5%AF%A5%BB%A5%EB%C3%B1%B0%CC%A4%C7%A4%CE%C1%E0%BA%EE
 
 definitionMapOld = {}
-with open('old/definition.csv', 'r',encoding="windows-1252") as csvfile:
+with open('old/definition.csv', 'r', encoding="windows-1252") as csvfile:
     reader = csv.reader(csvfile, delimiter=';', quotechar='|')
     header = next(reader)
     for row in reader:
@@ -61,7 +61,7 @@ with open('old/definition.csv', 'r',encoding="windows-1252") as csvfile:
             emmin = max(emmin,code)
 
 definitionNewEmptyStack = []
-with open('new/definition.csv', 'r',encoding="windows-1252") as csvfile:
+with open('new/definition.csv', 'r', encoding="windows-1252") as csvfile:
     reader = csv.reader(csvfile, delimiter=';', quotechar='|')
     header = next(reader)
     for row in reader:
