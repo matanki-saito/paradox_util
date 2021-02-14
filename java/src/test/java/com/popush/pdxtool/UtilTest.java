@@ -22,6 +22,22 @@ class UtilTest {
         var json = Util.convertJson(Paths.get(url.toURI()));
 
         Files.writeString(Paths.get("test.json"), json);
+
+        softAssertions.assertThat(json).isNotNull();
     }
 
+    @Test
+    void convertTxt(SoftAssertions softAssertions) throws Exception {
+        ClassLoader classLoader = getClass().getClassLoader();
+        var url = classLoader.getResource("test.json");
+        if (url == null) {
+            return;
+        }
+
+        var txt = Util.convertTxt(Paths.get(url.toURI()));
+
+        Files.writeString(Paths.get("test.reverse.txt"), txt);
+
+        softAssertions.assertThat(txt).isNotNull();
+    }
 }
