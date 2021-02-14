@@ -1,4 +1,4 @@
-grammar Expr;
+grammar Pdx;
 
 // lexer
 COMMENT: '#' ~('\n'|'\r')* ('\r\n' | '\r' | '\n' | EOF) -> skip;
@@ -7,7 +7,7 @@ COMMENT: '#' ~('\n'|'\r')* ('\r\n' | '\r' | '\n' | EOF) -> skip;
 WRAP_STRING: '"' CHAR* '"';
 
 // space is ignored
-SPACE: (' '|'\t') -> skip;
+SPACE: (' '|'\t'|'\r'|'\n'|'\r\n') -> skip;
 
 // 5.00, 120, -1, 1e-5, 2e+500,
 NUMBER: '-'? INT FRAC? EXP?;
@@ -26,15 +26,11 @@ KEY_LEVEL_STRING:
   | ALPHABETS
   | EUROPEAN_LANG_CHARS
   | INT
+  | Semicolon
   | HTPHEN
   | UNDERSCORE
   | Apostrophe
   | SINGLE_QUOTE)+;
-
-ID_LEVEL_STRING:
-  ( Semicolon
-  | KEY_LEVEL_STRING
-  )+;
 
 BRACHET_START: '{';
 BRACHET_END: '}';
@@ -61,24 +57,26 @@ FRAC: DOT [0-9]+;
 INT: '0' | ([1-9] [0-9]*);
 
 // parser
-primitive: FALSE
-         | TRUE
-         | NULL
-         | YES
-         | NO
-         | NUMBER
-         | KEY_LEVEL_STRING
-         | ID_LEVEL_STRING
-         | WRAP_STRING;
+primitive
+: FALSE
+| TRUE
+| NULL
+| YES
+| NO
+| NUMBER
+| KEY_LEVEL_STRING
+| WRAP_STRING;
 
-name_separator : LT
-               | LTE
-               | GT
-               | GTE
-               | EQ;
+nameSeparator
+: LT
+| LTE
+| GT
+| GTE
+| EQ;
 
-value : member
-      | object;
+value
+: element
+| array;
 
 // キーには数字を使用できる
 // 例）1000.0
@@ -88,12 +86,20 @@ value : member
 // 例）abc.1
 // 例）bbb-6-czAÿ.10a_1''5
 // 例）あいう NG
-key: (NUMBER|DATE_TIME|KEY_LEVEL_STRING);
+key
+: (NUMBER|DATE_TIME|KEY_LEVEL_STRING);
 
-member: key name_separator value
-      | object
-      | primitive;
+root
+: elements+=element*;
 
-object: BRACHET_START (member)* BRACHET_END;
+element
+: keyValue
+| array
+| primitive;
 
-comment: COMMENT;
+keyValue
+: key nameSeparator value;
+
+array
+: BRACHET_START elements+=element* BRACHET_END;
+
