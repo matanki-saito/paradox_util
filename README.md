@@ -1,0 +1,1 @@
+# Paradox txt parser
