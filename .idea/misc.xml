@@ -13,10 +13,34 @@
           <option name="language" value="Java" />
           <option name="generateVisitor" value="true" />
         </PerGrammarGenerationSettings>
+        <PerGrammarGenerationSettings>
+          <option name="fileName" value="$PROJECT_DIR$/antlr/Pdx.g4" />
+          <option name="autoGen" value="true" />
+          <option name="outputDir" value="C:\repo\paradox_util\antlr" />
+          <option name="libDir" value="" />
+          <option name="encoding" value="utf-8" />
+          <option name="pkg" value="com.popush" />
+          <option name="language" value="Java" />
+          <option name="generateVisitor" value="true" />
+        </PerGrammarGenerationSettings>
+        <PerGrammarGenerationSettings>
+          <option name="fileName" value="$PROJECT_DIR$/Pdx.g4" />
+          <option name="autoGen" value="true" />
+          <option name="outputDir" value="C:\repo\paradox_util\java\src\main\java" />
+          <option name="libDir" value="" />
+          <option name="encoding" value="utf-8" />
+          <option name="pkg" value="com.popush.pdxtool.antlr" />
+          <option name="language" value="Java" />
+          <option name="generateVisitor" value="true" />
+        </PerGrammarGenerationSettings>
       </list>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_15" project-jdk-name="15" project-jdk-type="JavaSDK">
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
+  <component name="FrameworkDetectionExcludesConfiguration">
+    <file type="web" url="file://$PROJECT_DIR$/java" />
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_15_PREVIEW" project-jdk-name="15" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
 </project>
